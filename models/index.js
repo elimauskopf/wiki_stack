@@ -1,12 +1,11 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('postgres://localhost:5432/wikistack', {
-  logging:false
+  logging: false
 });
 
 
 function generateUrlTitle (title) {
   if (title) {
-    console.log('awef')
     return title.replace(/\s+/g, '_').replace(/\W/g, '');
   } else {
     return Math.random().toString(36).substring(2, 7);
@@ -48,10 +47,9 @@ var Page = db.define('page', {
 // }
 );
 
-Page.hook('beforeValidate',function(page){
+Page.hook('beforeValidate', function(page){
   page.urlTitle = generateUrlTitle(page.title);
 });
-
 
 var User = db.define('user', {
     name: {
@@ -65,7 +63,7 @@ var User = db.define('user', {
     }
 });
 
-
+Page.belongsTo(User, { as: 'author' });
 // var Page = db.define('Page', {
 //   title: sequelize.STRING,
 //   urlTitle: sequelize.STRING,
@@ -81,5 +79,5 @@ var User = db.define('user', {
 module.exports = {
   Page: Page,
   User: User,
-  db : db
+  db: db
 };
